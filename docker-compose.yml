@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+    php-apache-trucker:
+        container_name: php-apache-trucker
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        depends_on:
+            - dbtrucker
+        volumes:
+            - .:/var/www/html/myapp
+        ports:
+            - 8001:80
+    dbtrucker:
+        container_name: dbtrucker
+        image: mariadb:10.3
+        restart: always
+        environment: 
+            MYSQL_DATABASE: trucker_tracker 
+            MYSQL_PASSWORD: p@ssw0rd
+            MYSQL_USERNAME: root
+            MYSQL_ROOT_PASSWORD: p@ssw0rd@r
+        ports:
+            - "1001:3306"  
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - '1002:80'
+        restart: always
+        environment:
+            PMA_HOST: dbtrucker
+        depends_on:
+            - dbtrucker     

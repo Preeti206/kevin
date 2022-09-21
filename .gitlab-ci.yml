@@ -1,0 +1,21 @@
+variables:
+  DEV_ROOT: /home/trucker/webapps/trucker/public_html 
+
+# Set out stages
+stages:
+  - build
+  - test
+  - release
+  - deploy
+
+deploy_dev:
+  stage: deploy
+  tags:
+    - runcloud
+    - devproxyapduck
+  script:
+    # Pull
+    - /bin/cp -a * $DEV_ROOT
+    - chown -R trucker $DEV_ROOT
+  only:
+    - main 
